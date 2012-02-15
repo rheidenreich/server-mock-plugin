@@ -1,0 +1,55 @@
+La idea del plugin es que se puedan levantar los mocks de manera local en la misma aplicacion de la forma:
+
+/mocks/countries/VE
+
+eso devolvería el JSON correspondiente a /countries/VE .
+
+El JSON que devolvería tiene que estar en la ruta:
+
+grails-app/mocks/GET/countries/_countries_VE.JSON
+
+Si lo que se quiere mockear es un post, entonces reemplazariamos la carpeta GET por POST.
+
+El contenido puede estar bajo el formato JSON tradicional, o si queremos devolver un codigo de error que no sea 200, tendriamos que poner.
+
+{
+"responseCode":XXX,
+"responseContent":
+	{"id":"123"}
+}
+
+Algunos ejemplos:
+
+1) http://localhost:8090/server-mock/categories/MLA9016, busca el archivo con el nombre _categories_MLA9016.json
+
+2) questions/search?status=unanswered&item=MLA402221146&attributes=total  
+devuelve _questions_search?attributes=totalitem=MLA402221146status=unanswered.json
+
+
+3) Para algunos casos de urls muy largas (mas de 255 caracteres), por limitaciones de OS no se puede armar el nombre del archivo siguiendo las reglas de 1) y 2), se genera un archivo con el nombre hash en MD5.
+
+4) Se definió el archivo alternativo para casos particulares donde se requiere una respuesta unica, como es el caso de auth/user_session:
+-> auth/user_session/051814-BVT4CK5T8WALWBS6POLTHT06663DL1-86721755
+-> auth/user_session/034451-LJKHGGVITYFLJKLGLIKLJHGY-66666808 
+
+         devuelven el mismo archivo: _auth_user_session_*.json
+
+permitiendo asi mockear la parte de manejo de sesiones del plugin mlapp (siempre devolverá el mismo user_id).
+
+El caracter " * " indica que para toda url que empieza con auth/user_session y no existe un archivo que matchea exactamente con la url del request, tiene como respuesta el json _auth_user_session_*.json
+
+La regla es la siguiente: si existe un archivo que matchea exactamente con la url, se devuelve ese archivo, sino el archivo alternativo (en este caso se genera un warning en logs del server).
+
+ADVERTENCIA: Tengan cuidado al definir los archivos alternativos, ya que pueden devolver jsons que no corresponden:
+(ejemplo: _users_19875420_*.json para url de /users/86721755/items/search?offset=0&limit=50&status=active&caller.id=86721755 devolvería el json de user)
+
+5) En casos cuando el archivo requerido y el alternativo no se encuentra, se devuelve error 404 con el nombre del archivo que no se encontró y su url asociada. 
+
+6) Los archivos se encuentran en grails-app/domain/, distribuidos por métodos REST (GET, POST, PUT, etc).
+
+En un futuro śe podría agregar escenarios de test (por ejemplo el directorio grails-app/domain/test_integracion/GET contendría archivos para casos de test de integración), y validación de jsons en casos de operaciones PUT o POST
+
+
+Codigo Fuente:
+
+Hoy en dia pueden ver que toda la logica se resuelve en el MockServerController y no hay tests. Actualmente estoy pasando algunas cosas a un servicio agregandoles tests, en el momento en que temrine eso limpiaré el código del controller :-) . La idea es poder ponerle un poco mas de pilas en algun tiempito libre para dejarlo al día y ademas hacer algunas herramientas para crear los mock con el formato que puse arriba (y demas cosas que podrían ser piolas). Si alguien desea darme una mano sería mas que bienvenido!
