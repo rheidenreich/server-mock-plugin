@@ -1,0 +1,13 @@
+*~
+*.log
+*.swp
+*.orig
+.settings
+.classpath
+logs
+target
+bin
+target-eclipse
+web-app/WEB-INF/classes
+.project
+.classpath

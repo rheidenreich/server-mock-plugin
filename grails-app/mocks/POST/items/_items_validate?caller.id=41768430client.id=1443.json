@@ -1,0 +1,1 @@
+{"message":"validation_error","error":"Validation error","status":400,"cause":[{"code":"item.available_quantity.invalid","message":"The field is mandatory for selected category."}]}
