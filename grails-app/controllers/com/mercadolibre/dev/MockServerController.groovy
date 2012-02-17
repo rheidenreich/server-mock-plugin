@@ -42,9 +42,9 @@ class MockServerController {
 
 	private def processRequest(String method){
 		FileInputStream ins = null
-		try {
-			String fileName = getFileName()
-			ins = getFileInputStream(fileName, method)
+		try {			
+			String fileName = getFileName()			
+			ins = getFileInputStream(fileName, method)			
 			def resp = JSONResponseProcessor.getResponse(JSON.parse(ins, ENCODING), method)
 			log.debug "${method}: Returning JSON fileName: [${fileName}] for Request URI [${getURI()}]. Returning [${resp.responseCode}]."
 			render (text: resp.responseContent , status:resp.responseCode)
@@ -134,15 +134,15 @@ class MockServerController {
 		try {
 			// mockServerConfig grailsApplication.config.mock.filesource mockServerConfig.filePath
 			//String home = ConfigurationHolder.config.mock.filesource
-			String fullName = "${ConfigurationHolder.config.mock.filesource}/${method}${file}"
-			log.debug("getting filename: "+fullName)
+			String fullName = new File("").getAbsolutePath()+"/grails-app/mocks/${method}${file}"
+			log.debug("getting filename: ${fullName}")
 			ins = new FileInputStream(fullName)
 			return ins
 		} catch (java.io.FileNotFoundException e) {
 			try {
 				String alternativeFileName = getAlternativeFileName(method)
-				ins = new FileInputStream("${ConfigurationHolder.config.mock.filesource}/${method}/${alternativeFileName}")
-				//				log.warn "${method}: Use optional file [${alternativeFileName}}] for Request URI [${getURI()}]"
+				ins = new FileInputStream(new File("").getAbsolutePath()+"/grails-app/mocks/${method}/${alternativeFileName}")
+				log.warn "${method}: Use optional file [${alternativeFileName}}] for Request URI [${getURI()}]"
 				return ins
 			} catch (java.io.FileNotFoundException e1) {
 				throw e // Throw first

@@ -1,5 +1,7 @@
 package com.mercadolibre.dev
 
+import grails.converters.JSON
+
 
 public class JSONResponseProcessor {
     public static RestClientResponse getResponse(json, method) {
@@ -18,7 +20,7 @@ public class JSONResponseProcessor {
 			resp.responseCode = JSONResponseProcessor.getSuccessStatus(method)
 		}
 		//Content
-		if (json.responseContent && isValidJSON(json.responseContent)){
+		if (json.responseContent && isValidJSON(json.responseContent)){ //  && isValidJSON(json.responseContent)  && !(json.responseContent instanceof JSONArray)
 			resp.responseContent = json.responseContent
 		} else {
 			resp.responseContent = json
