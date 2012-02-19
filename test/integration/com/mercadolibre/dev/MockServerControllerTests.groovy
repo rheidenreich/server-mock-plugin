@@ -2,7 +2,8 @@ package com.mercadolibre.dev
 
 import grails.test.*
 
-class MockServerControllerTests extends GroovyTestCase {
+
+class MockServerControllerTests extends GroovyTestCase{
     protected void setUp() {
         super.setUp()
     }
@@ -12,11 +13,6 @@ class MockServerControllerTests extends GroovyTestCase {
     }
 
     void testSimpleGET() {
-		
-//		def controller = new MockServerController()
-//		controller.request.forwardURI = "/countries/VE"
-//		controller.get()
-	
-
+		// Dejamos dejamos de lado estas pruebas para utilizar las funcionales
     }
 }

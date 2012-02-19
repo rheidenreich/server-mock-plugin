@@ -7,14 +7,11 @@ import java.util.SortedMap
 class MockedFileService {
 
     static transactional = false
-	
-	//private static final String HOME_FOLDER_PATH = ConfigurationHolder.config.mock.filesource
 
 
-    public FileInputStream getFileInputStream(String file, String method){ // , String forwardURI, String contextPath, Map params
+    public FileInputStream getFileInputStream(String file, String method){
 		FileInputStream ins
 		try {
-//			String fullName = "${basedir}/grails-app/mocks}/${method}${file}" // ${${basedir}/grails-app/mocks}s
 			String fullName = new File("").getAbsolutePath()+"/grails-app/mocks/${method}${file}"
 			ins = new FileInputStream(fullName)
 			return ins
@@ -25,24 +22,8 @@ class MockedFileService {
 	}
 	
 	
-//	public FileInputStream getAlternativeFileInputStream(String file, String method, String forwardURI, String contextPath, Map params){
-//		FileInputStream ins
-//		try{
-//			String alternativeFileName = getAlternativeFileName(method, forwardURI, contextPath)
-//			String fullName = new File("").getAbsolutePath()+"/grails-app/mocks/${method}${alternativeFileName}"
-//			ins = new FileInputStream("${this.HOME_FOLDER_PATH}/${method}/${alternativeFileName}")
-//			return ins
-//			}
-//		catch(java.io.FileNotFoundException e){
-//			log.error("No se pudo encontrar el archivo [${file}]")
-//			throw e			
-//			}
-//		
-//	}
 	
-	
-	
-	public String getFileName(String forwardURI, String contextPath, Map params){
+	public String getFileName(String forwardUri, Map params){
 		SortedMap paramMap = getSortedQueryParams(params)
 		Iterator iterator = paramMap.keySet().iterator();
 		StringBuffer queryParamStringBuff = new StringBuffer("")
@@ -54,7 +35,7 @@ class MockedFileService {
 				queryParamStringBuff.append paramMap.get(key)
 			}
 		}
-		String forwardUri = new String(forwardURI).replace(contextPath, "").replace("/mocks","")
+
 		String folder =  parseFolderName(forwardUri) 
 		if (!folder && forwardUri){
 			// TODO: en el caso de que sea un /items o similar
@@ -81,9 +62,7 @@ class MockedFileService {
 	}
 	
 	
-	public String getAlternativeFileName(String method, String forwardURI, String contextPath){
-		// replace the existing controller url-map
-		String forwardUri = new String(forwardURI).replace( contextPath, "").replace("/mocks","")
+	public String getAlternativeFileName(String method, String forwardUri){
 		String folder = parseFolderName(forwardUri)
 		String altFileName = forwardUri.replace(folder,"")
 		StringBuffer fileName = new StringBuffer(new String(folder+(forwardUri.replaceAll("/", "_"))))
@@ -92,17 +71,21 @@ class MockedFileService {
 			fileName.deleteCharAt fileName.lastIndexOf ("_")
 		}
 		while (fileName != null && !fileName.toString().equals("")){
-//			if (new File(HOME_FOLDER_PATH+"/${method}/"+fileName.toString()+"_*.json").exists()) {
+			if (new File(new File("").getAbsolutePath()+"/grails-app/mocks/${method}/"+fileName.toString()+"_*.json").exists()) {
 				fileName.append "_*.json"
 				return fileName.toString()
-//			}
+			}
 			fileName.delete(fileName.lastIndexOf ("_"), fileName.length())
 		}
 		return folder + fileName.toString()
 	}
 	
-	protected String parseFolderName(String forwardUri){
+	public String parseFolderName(String forwardUri){
 		return "/"+forwardUri.split("/")[1]+"/"
+		}
+	
+	public String cleanForwardURI(String forwardURI, String contextPath){
+			return new String(forwardURI).replace( contextPath, "").replace("/mocks","")
 		}
 	
 	

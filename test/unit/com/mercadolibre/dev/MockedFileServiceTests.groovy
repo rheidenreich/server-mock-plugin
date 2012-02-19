@@ -19,9 +19,8 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 		
 	String forwardUri = "/countries/VE"
 	def paramsMap = [:]
-	String context = ""	
 		
-	assertEquals ("/countries/_countries_VE.json", fileService.getFileName(forwardUri, context, paramsMap))	
+	assertEquals ("/countries/_countries_VE.json", fileService.getFileName(forwardUri, paramsMap))	
 
 		}
 	
@@ -29,9 +28,8 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 		
 	String forwardUri = "/countries/VE"
 	def paramsMap = ["caller.id":"132", "client.id":"144"]
-	String context = ""
 		
-	assertEquals ("/countries/_countries_VE?caller.id=132client.id=144.json", fileService.getFileName(forwardUri, context, paramsMap))
+	assertEquals ("/countries/_countries_VE?caller.id=132client.id=144.json", fileService.getFileName(forwardUri, paramsMap))
 
 		}
 	
@@ -48,7 +46,6 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 			"test5":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			"test6":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			]
-		String context = ""
 		
 		StringBuffer fileName = new StringBuffer("/users/_users?caller.id=132client.id=144")
 		fileName.append("test1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
@@ -61,29 +58,33 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 		String hashedFileName = MD5Helper.getHash(fileName.toString())
 		
 			
-		assertEquals ("/users/"+hashedFileName+".json", fileService.getFileName(forwardUri, context, paramsMap))
+		assertEquals ("/users/"+hashedFileName+".json", fileService.getFileName(forwardUri, paramsMap))
 	
 			}
+	
+//	void testOAuthCall(){
+//		
+//		
+//		
+//		}
 	
 	
 	void testNoParamsUrl(){
 		
 		String forwardUri = "/countries"
 		def paramsMap = [:]
-		String context = ""
 			
-		assertEquals ("/countries/_countries.json", fileService.getFileName(forwardUri, context, paramsMap))
+		assertEquals ("/countries/_countries.json", fileService.getFileName(forwardUri, paramsMap))
 		
 		}
 	
 	
 	void testSimpleAlternativeName(){
 		
-		String forwardUri = "/countries"
+		String forwardUri = "/users"
 		def paramsMap = [:]
-		String context = ""
 			
-		assertEquals ("/countries/_countries_*.json", fileService.getAlternativeFileName("GET",forwardUri, context))
+		assertEquals ("/users/_users_*.json", fileService.getAlternativeFileName("GET",forwardUri))
 		
 		}
 	
