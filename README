@@ -48,8 +48,3 @@ ADVERTENCIA: Tengan cuidado al definir los archivos alternativos, ya que pueden 
 6) Los archivos se encuentran en grails-app/domain/, distribuidos por métodos REST (GET, POST, PUT, etc).
 
 En un futuro śe podría agregar escenarios de test (por ejemplo el directorio grails-app/domain/test_integracion/GET contendría archivos para casos de test de integración), y validación de jsons en casos de operaciones PUT o POST
-
-
-Codigo Fuente:
-
-Hoy en dia pueden ver que toda la logica se resuelve en el MockServerController y no hay tests. Actualmente estoy pasando algunas cosas a un servicio agregandoles tests, en el momento en que temrine eso limpiaré el código del controller :-) . La idea es poder ponerle un poco mas de pilas en algun tiempito libre para dejarlo al día y ademas hacer algunas herramientas para crear los mock con el formato que puse arriba (y demas cosas que podrían ser piolas). Si alguien desea darme una mano sería mas que bienvenido!
