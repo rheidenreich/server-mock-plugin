@@ -88,3 +88,5 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
+
+grails.rest.injectInto = ["com.mercadolibre.dev.FileDumperService"]

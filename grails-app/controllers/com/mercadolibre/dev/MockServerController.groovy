@@ -3,10 +3,12 @@ package com.mercadolibre.dev
 import grails.converters.*
 
 import java.io.FileInputStream
+import com.mercadolibre.dev.Constants
 
 
 class MockServerController {
 
+/*
 	private static final String ENCODING = "UTF-8"
 	private static final int ERROR_STATUS = 404;
 
@@ -14,7 +16,8 @@ class MockServerController {
 	private static final String POST_METHOD    = "POST";
 	private static final String PUT_METHOD     = "PUT";
 	private static final String DELETE_METHOD  = "DELETE";
-	private static final String OPTIONS_METHOD = "OPTIONS"; 
+	private static final String OPTIONS_METHOD = "OPTIONS";
+*/	 
 
 	def mockServerConfig
 	def mockedFileService
@@ -47,23 +50,23 @@ class MockServerController {
 		try {						
 			fileName = mockedFileService.getFileName(forwardUri, params)		
 			ins = mockedFileService.getFileInputStream(fileName, method)
-			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, ENCODING), method)
+			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING), method)
 			log.debug "${method}: Returning JSON fileName: [${fileName}] for Request URI [${getURI()}]. Returning [${resp.responseCode}]."
 			render (text: resp.responseContent , status:resp.responseCode)
 		} catch (java.io.FileNotFoundException e) {			
 			fileName = mockedFileService.getAlternativeFileName(method, forwardUri)
 			log.warn "${method}: Use optional file [${fileName}}] for Request URI [${getURI()}]"
 			ins = mockedFileService.getFileInputStream(fileName, method)
-			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, ENCODING), method)
+			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING), method)
 			render (text: resp.responseContent , status:resp.responseCode)
 		} catch (java.io.FileNotFoundException e){				
-			String errorMsg = "${method}: Request URI [${getURI()}], JSON Mock file [${fileName}] not found. Returning [${ERROR_STATUS}]."
+			String errorMsg = "${method}: Request URI [${getURI()}], JSON Mock file [${fileName}] not found. Returning [${Constants.ERROR_STATUS}]."
 			log.error errorMsg
-			render (text: "{\"error\":\"${errorMsg}\"}", status: ERROR_STATUS)
+			render (text: "{\"error\":\"${errorMsg}\"}", status: Constants.ERROR_STATUS)
 		} catch (Exception e) {
 			String errorMsg = e.getMessage()
 			log.error errorMsg
-			render (text: "{\"error\":\"${errorMsg}\"}", status: ERROR_STATUS)
+			render (text: "{\"error\":\"${errorMsg}\"}", status: Constants.ERROR_STATUS)
 		} finally {
 			if (ins) ins.close()
 		}
