@@ -1,5 +1,10 @@
 package com.mercadolibre.dev
 
+import java.util.logging.Level
+import java.util.logging.LogManager
+
+import org.apache.log4j.BasicConfigurator
+
 import grails.test.*
 
 class MockedFileServiceTests extends GrailsUnitTestCase {
@@ -7,6 +12,11 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 	
     protected void setUp() {
         super.setUp()
+//		BasicConfigurator.configure()
+//		log = LogManager.getLogger("MailService")
+//	
+//		MockedfileService.class.metaClass.getLog << {-> log}
+	
 		fileService = new MockedFileService()
     }
 
@@ -96,6 +106,11 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 	void testOldWorldFolderName(){
 		String forwardUri = "/jm/webservices/id=123"
 		assertEquals("/jm/", fileService.parseFolderName(forwardUri))
+		}
+	
+	void testLongURLFolderName(){
+		String forwardUri = new String("/users?caller.id=132&client.id=144&test1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test2=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test3=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test4=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test5=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test6=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+		assertEquals("/users/", fileService.parseFolderName(forwardUri))
 		}
 	
 	void testSeveralLevelsFolderName(){

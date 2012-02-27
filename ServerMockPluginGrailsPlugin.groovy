@@ -2,7 +2,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class ServerMockPluginGrailsPlugin {
     // the plugin version
-    def version = "0.2"
+    def version = "0.3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -37,7 +37,6 @@ The Main purpose for this plugin is to emulate calls to an external API, being a
 
     def doWithSpring = {
         // TODO Implement runtime spring config (optional)
-		fileSource = '/home/mocks/'
     }
 
     def doWithDynamicMethods = { ctx ->
@@ -50,16 +49,6 @@ The Main purpose for this plugin is to emulate calls to an external API, being a
     }
 	
 	void loadConfig() {
-		GroovyClassLoader classLoader = new GroovyClassLoader(getClass().getClassLoader())
-		 def confClass
-		try {
-			 confClass = classLoader.loadClass('MockServerConfig')
-		 } catch (Exception e) {
-			// <gulp>
-		 }
-		ConfigObject config = confClass ? new ConfigSlurper().parse(confClass).merge(ConfigurationHolder.config) : ConfigurationHolder.config
-		
-//		ServerMockPluginGrailsPlugin.fileSource = config.mock.filesource
 
 
 	}

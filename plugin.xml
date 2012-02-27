@@ -1,4 +1,4 @@
-<plugin name='server-mock-plugin' version='0.2' grailsVersion='1.3.7 &gt; *'>
+<plugin name='server-mock-plugin' version='0.3' grailsVersion='1.3.7 &gt; *'>
   <author>Roman Babkin &amp; Trigve Korssjoen</author>
   <authorEmail>rbabkin10@gmail.com</authorEmail>
   <title>Static content file-server</title>
@@ -16,8 +16,9 @@ The Main purpose for this plugin is to emulate calls to an external API, being a
     <resource>UrlMappings</resource>
     <resource>spring.resources</resource>
     <resource>com.mercadolibre.dev.MockServerController</resource>
-    <resource>com.mercadolibre.dev.FileService</resource>
-    <resource>server.mock.plugin.FileService</resource>
+    <resource>com.mercadolibre.dev.FileDumperService</resource>
+    <resource>com.mercadolibre.dev.MockedFileService</resource>
+    <resource>com.mercadolibre.dev.RestclientMockService</resource>
     <resource>com.mercadolibre.dev.MD5Helper</resource>
   </resources>
   <dependencies />

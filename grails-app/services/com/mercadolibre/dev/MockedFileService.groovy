@@ -16,7 +16,7 @@ class MockedFileService {
 			ins = new FileInputStream(fullName)
 			return ins
 		} catch (java.io.FileNotFoundException e) {
-			log.error("No se pudo encontrar el archivo [${file}]")
+//			log.error("No se pudo encontrar el archivo [${file}]")
 			throw e	
 		}
 	}
@@ -81,7 +81,8 @@ class MockedFileService {
 	}
 	
 	public String parseFolderName(String forwardUri){
-		return "/"+forwardUri.split("/")[1]+"/"
+		String clearController = forwardUri.split("\\?")[0]
+		return "/"+clearController.split("/")[1]+"/"
 		}
 	
 	public String cleanForwardURI(String forwardURI, String contextPath){
