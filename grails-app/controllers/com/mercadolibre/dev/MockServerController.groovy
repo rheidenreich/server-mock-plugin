@@ -41,11 +41,11 @@ class MockServerController {
 			fileName = mockedFileService.getFileName(forwardUri, params)		
 			ins = mockedFileService.getFileInputStream(fileName, method)
 			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING), method)
-			log.info "${method}: Returning JSON fileName: [${fileName}] for Request URI [${getURI()}]. Returning [${resp.responseCode}]."
+			log.debug "${method}: Returning JSON fileName: [${fileName}] for Request URI [${getURI()}]. Returning [${resp.responseCode}]."
 			render (text: resp.responseContent , status:resp.responseCode)
 		} catch (java.io.FileNotFoundException e) {			
 			fileName = mockedFileService.getAlternativeFileName(method, forwardUri)
-			log.info "${method}: Use optional file [${fileName}}] for Request URI [${getURI()}]"
+			log.warn "${method}: Use optional file [${fileName}}] for Request URI [${getURI()}]"
 			ins = mockedFileService.getFileInputStream(fileName, method)
 			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING), method)
 			render (text: resp.responseContent , status:resp.responseCode)

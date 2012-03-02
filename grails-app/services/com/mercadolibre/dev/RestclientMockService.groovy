@@ -12,7 +12,7 @@ class RestclientMockService {
 
     static transactional = false
 	
-	def mockedFileService
+	def mockedFileService = new MockedFileService()
 
 
     def get = { params -> 
@@ -40,7 +40,7 @@ class RestclientMockService {
 			fileName = mockedFileService.getFileName(uri, map)
 			ins = mockedFileService.getFileInputStream(fileName, method)
 			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING), method)
-//			log.debug "${method}: Returning JSON fileName: [${fileName}] for Request URI [${uri}]. Returning [${resp.responseCode}]."
+			log.debug "${method}: Returning JSON fileName: [${fileName}] for Request URI [${uri}]. Returning [${resp.responseCode}]."
 			if (resp.responseCode < 399){
 				resultClosure(params.success, resp)
 			}else{
@@ -48,7 +48,10 @@ class RestclientMockService {
 			}
 		}
 		catch(java.io.FileNotFoundException e){
-			fileName = mockedFileService.getAlternativeFileName(method, uri)
+			String alternativeFile = mockedFileService.getAlternativeFileName(method, uri)
+			String errorMsg = "${method}: Request URI [${uri}], JSON Mock file [${fileName}] not found. Returning ${alternativeFile}"
+			log.error(errorMsg)
+			fileName = alternativeFile
 			ins = mockedFileService.getFileInputStream(fileName, method)
 			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING),method)
 			if (resp.responseCode < 399){
@@ -58,8 +61,8 @@ class RestclientMockService {
 			}
 		}
 		catch(java.io.FileNotFoundException e1){
-			String errorMsg = "${method}: Request URI [${getURI()}], JSON Mock file [${fileName}] not found. Returning [${Constants.ERROR_STATUS}]."
-//			log.error errorMsg
+			String errorMsg = "${method}: Request URI [${params.uri}], JSON Mock file [${fileName}] not found. Returning [${Constants.ERROR_STATUS}]."
+			log.error errorMsg
 			resp = [responseContent : "{\"error\":\"${errorMsg}\"}", responseCode: Constants.ERROR_STATUS]
 			}
 		finally {
