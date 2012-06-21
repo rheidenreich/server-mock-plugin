@@ -6,14 +6,11 @@
 The Main purpose for this plugin is to emulate calls to an external API, being able to manage response status codes.
 </description>
   <documentation>http://grails.org/plugin/server-mock-plugin</documentation>
+  <type>ServerMockPluginGrailsPlugin</type>
   <resources>
     <resource>BootStrap</resource>
-    <resource>BuildConfig</resource>
-    <resource>Config</resource>
-    <resource>DataSource</resource>
     <resource>ServerMockPluginConfig</resource>
     <resource>ServerMockPluginUrlMappings</resource>
-    <resource>UrlMappings</resource>
     <resource>spring.resources</resource>
     <resource>com.mercadolibre.dev.MockServerController</resource>
     <resource>com.mercadolibre.dev.FileDumperService</resource>
@@ -21,6 +18,16 @@ The Main purpose for this plugin is to emulate calls to an external API, being a
     <resource>com.mercadolibre.dev.RestclientMockService</resource>
     <resource>com.mercadolibre.dev.MD5Helper</resource>
   </resources>
+  <repositories>
+    <repository name='grailsCentral' url='http://plugins.grails.org' />
+    <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
+    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+    <repository name='Codehaus' url='http://repository.codehaus.org/' />
+  </repositories>
   <dependencies />
+  <plugins />
+  <runtimePluginRequirements />
   <behavior />
 </plugin>
