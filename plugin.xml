@@ -1,4 +1,4 @@
-<plugin name='server-mock-plugin' version='0.3' grailsVersion='1.3.7 &gt; *'>
+<plugin name='server-mock-plugin' version='0.5' grailsVersion='1.3.7 &gt; *'>
   <author>Roman Babkin &amp; Trigve Korssjoen</author>
   <authorEmail>rbabkin10@gmail.com</authorEmail>
   <title>Static content file-server</title>
@@ -19,6 +19,7 @@ The Main purpose for this plugin is to emulate calls to an external API, being a
     <resource>com.mercadolibre.dev.MD5Helper</resource>
   </resources>
   <repositories>
+    <repository name='http://snapshots.repository.codehaus.org' url='http://snapshots.repository.codehaus.org/' />
     <repository name='grailsCentral' url='http://plugins.grails.org' />
     <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
     <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
@@ -26,7 +27,11 @@ The Main purpose for this plugin is to emulate calls to an external API, being a
     <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
     <repository name='Codehaus' url='http://repository.codehaus.org/' />
   </repositories>
-  <dependencies />
+  <dependencies>
+    <compile>
+      <dependency group='com.mercadolibre.opensource.frameworks' name='restclient' version='0.6.5' />
+    </compile>
+  </dependencies>
   <plugins />
   <runtimePluginRequirements />
   <behavior />

@@ -12,6 +12,7 @@ grails.project.dependency.resolution = {
     repositories {
         grailsPlugins()
         grailsHome()
+        mavenRepo "http://snapshots.repository.codehaus.org"
         grailsCentral()
 
         // uncomment the below to enable remote dependency resolution
@@ -25,6 +26,8 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
+
+        compile "com.mercadolibre.opensource.frameworks:restclient:0.6.5"   
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
     }

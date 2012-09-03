@@ -7,13 +7,26 @@ import com.mercadolibre.dev.RestClientResponse
 import grails.converters.*
 import com.mercadolibre.dev.Constants
 import com.sun.org.apache.xalan.internal.xsltc.compiler.Closure
+import com.mercadolibre.opensource.frameworks.restclient.cache.HttpResponseWrapper
+import org.apache.http.message.BasicStatusLine
+import org.apache.http.ProtocolVersion
 
 class RestclientMockService {
 
     static transactional = false
-	
+
+    boolean fromUnitTest = false
+
 	def mockedFileService = new MockedFileService()
 
+    public RestclientMockService(boolean fromUnitTest)
+    {
+        this.fromUnitTest = fromUnitTest
+    }
+
+    public RestclientMockService()
+    {
+    }
 
     def get = { params -> 
 		return processRequest(Constants.GET_METHOD, params)
@@ -22,9 +35,13 @@ class RestclientMockService {
 	def post = { params ->
 		return processRequest(Constants.POST_METHOD, params)
 		}
-	
 
-	private def processRequest = {method,  params ->
+    def put = { params ->
+        return processRequest(Constants.PUT_METHOD, params)
+    }
+
+
+    private def processRequest = {method,  params ->
 		
 		FileInputStream ins = null
 		String fileName
@@ -32,7 +49,15 @@ class RestclientMockService {
 		def uri = cleanUri(params.uri)
 		def map = getParamMapFromUri(params.uri)
 		def resultClosure = { closure, inData ->
-			def	data = [status: resp.responseCode, data: resp.responseContent]
+            def data
+            if (fromUnitTest)
+            {
+                data = new HttpResponseWrapper(resp.responseContent, 5,0, mockStatus(resp.responseCode), null)
+            }
+            else
+            {
+                data = [status: resp.responseCode, data: resp.responseContent]
+            }
 			closure.call(data)
 			}
 		
@@ -70,7 +95,12 @@ class RestclientMockService {
 		}
 		return [status: resp.responseCode, data: resp.responseContent]
 	}
-	
+
+    private mockStatus(def status)
+    {
+        return new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), status, status.toString())
+    }
+
 	public Map getParamMapFromUri(String uri){
 		Map params = [:]
 		String splittedParams
@@ -103,3 +133,4 @@ class RestclientMockService {
 	
 	
 }
+
