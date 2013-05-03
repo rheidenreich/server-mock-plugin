@@ -36,7 +36,7 @@ devuelve _questions_search?attributes=totalitem=MLA402221146status=unanswered.js
 
 permitiendo asi mockear la parte de manejo de sesiones del plugin mlapp (siempre devolverá el mismo user_id).
 
-El caracter " * " indica que para toda url que empieza con auth/user_session y no existe un archivo que matchea exactamente con la url del request, tiene como respuesta el json _auth_user_session_*.json
+El caracter " * " indica que para toda url que empieza con auth/user_session y no existe un archivo que matchea exactamente con la url del request, tiene como respuesta el json _auth_user_session_*.json. Se recomienda poner en cada carpeta del GET un _<nombre_api>_*.json para devolver la respuesta de 404.
 
 La regla es la siguiente: si existe un archivo que matchea exactamente con la url, se devuelve ese archivo, sino el archivo alternativo (en este caso se genera un warning en logs del server).
 
