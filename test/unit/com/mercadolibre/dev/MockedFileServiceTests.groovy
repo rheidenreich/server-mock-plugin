@@ -1,47 +1,30 @@
 package com.mercadolibre.dev
 
-import java.util.logging.Level
-import java.util.logging.LogManager
-
-import org.apache.log4j.BasicConfigurator
-
 import grails.test.*
+import org.junit.Test
+import grails.test.mixin.TestFor
 
-class MockedFileServiceTests extends GrailsUnitTestCase {
-	def fileService
-	
-    protected void setUp() {
-        super.setUp()
-//		BasicConfigurator.configure()
-//		log = LogManager.getLogger("MailService")
-//	
-//		MockedfileService.class.metaClass.getLog << {-> log}
-	
-		fileService = new MockedFileService()
-    }
+@TestFor(MockedFileService)
+class MockedFileServiceTests{
 
-    protected void tearDown() {
-        super.tearDown()
-    }
 
-	
 	void testSimpleFileName(){
-		
-	String forwardUri = "/countries/VE"
-	def paramsMap = [:]
-		
-	assertEquals ("/countries/_countries_VE.json", fileService.getFileName(forwardUri, paramsMap))	
 
-		}
+        String forwardUri = "/countries/VE"
+        def paramsMap = [:]
+
+        assertEquals ("/countries/VE.json", service.getFileName(forwardUri, paramsMap))
+
+	}
 	
 	void testFileNameWithParams(){
 		
-	String forwardUri = "/countries/VE"
-	def paramsMap = ["caller.id":"132", "client.id":"144"]
-		
-	assertEquals ("/countries/_countries_VE?caller.id=132client.id=144.json", fileService.getFileName(forwardUri, paramsMap))
+        String forwardUri = "/countries/VE"
+        def paramsMap = ["caller.id":"132", "client.id":"144"]
 
-		}
+        assertEquals ("/countries/VE?caller.id=132&client.id=144.json", service.getFileName(forwardUri, paramsMap))
+
+	}
 	
 	
 	void testFileWithLotsOfParams(){
@@ -54,37 +37,31 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 			"test3":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			"test4":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			"test5":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-			"test6":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "test6":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			]
 		
-		StringBuffer fileName = new StringBuffer("/users/_users?caller.id=132client.id=144")
-		fileName.append("test1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		fileName.append("test2=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		fileName.append("test3=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		fileName.append("test4=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		fileName.append("test5=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		fileName.append("test6=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		
+		StringBuffer fileName = new StringBuffer("users?caller.id=132&client.id=144")
+		fileName.append("&test1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+		fileName.append("&test2=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+		fileName.append("&test3=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+		fileName.append("&test4=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+		fileName.append("&test5=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        fileName.append("&test6=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
 		String hashedFileName = MD5Helper.getHash(fileName.toString())
 		
 			
-		assertEquals ("/users/"+hashedFileName+".json", fileService.getFileName(forwardUri, paramsMap))
+		assertEquals ("/users/"+hashedFileName+".json", service.getFileName(forwardUri, paramsMap))
 	
 			}
 	
-//	void testOAuthCall(){
-//		
-//		
-//		
-//		}
-	
-	
+
 	void testNoParamsUrl(){
 		
 		String forwardUri = "/countries"
 		def paramsMap = [:]
 			
-		assertEquals ("/countries/_countries.json", fileService.getFileName(forwardUri, paramsMap))
+		assertEquals ("/countries/countries.json", service.getFileName(forwardUri, paramsMap))
 		
 		}
 	
@@ -94,37 +71,37 @@ class MockedFileServiceTests extends GrailsUnitTestCase {
 		String forwardUri = "/users"
 		def paramsMap = [:]
 			
-		assertEquals ("/users/_users_*.json", fileService.getAlternativeFileName("GET",forwardUri))
+		assertEquals ("/users/*.json", service.getAlternativeFileName("GET",forwardUri))
 		
 		}
 	
 	void testSimpleFolderName(){
 		String forwardUri = "/countries"		
-		assertEquals("/countries/", fileService.parseFolderName(forwardUri))
+		assertEquals("/countries/", service.parseFolderName(forwardUri))
 		}
 	
 	void testOldWorldFolderName(){
 		String forwardUri = "/jm/webservices/id=123"
-		assertEquals("/jm/", fileService.parseFolderName(forwardUri))
+		assertEquals("/jm/webservices/", service.parseFolderName(forwardUri))
 		}
 	
 	void testLongURLFolderName(){
 		String forwardUri = new String("/users?caller.id=132&client.id=144&test1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test2=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test3=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test4=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test5=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&test6=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-		assertEquals("/users/", fileService.parseFolderName(forwardUri))
+		assertEquals("/users/", service.parseFolderName(forwardUri))
 		}
 	
 	void testSeveralLevelsFolderName(){
 		String forwardUri = "/jm/webservices/tucarro/otherlevel/123" 
-		assertEquals("/jm/", fileService.parseFolderName(forwardUri))
+		assertEquals("/jm/webservices/tucarro/otherlevel/", service.parseFolderName(forwardUri))
 		}
 	
 	
 	void testSimpleFileContent(){
 		
 		String method = "GET"
-		String fileName = "/countries/_countries_VE.json"
+		String fileName = "/countries/VE.json"
 		
-		def ins = fileService.getFileInputStream(fileName, method)
+		def ins = service.getFileInputStream(fileName, method)
 		
 		assertTrue( new DataInputStream(ins).readLine().contains("VE"))
 		

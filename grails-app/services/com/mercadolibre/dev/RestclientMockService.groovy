@@ -2,14 +2,10 @@ package com.mercadolibre.dev
 
 import grails.converters.JSON
 
-
-import com.mercadolibre.dev.RestClientResponse
-import grails.converters.*
-import com.mercadolibre.dev.Constants
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Closure
 import com.mercadolibre.opensource.frameworks.restclient.cache.HttpResponseWrapper
 import org.apache.http.message.BasicStatusLine
 import org.apache.http.ProtocolVersion
+import javax.servlet.http.HttpServletResponse
 
 class RestclientMockService {
 
@@ -29,15 +25,15 @@ class RestclientMockService {
     }
 
     def get = { params -> 
-		return processRequest(Constants.GET_METHOD, params)
+		return processRequest(RestMethod.GET.name(), params)
     }
 	
 	def post = { params ->
-		return processRequest(Constants.POST_METHOD, params)
+		return processRequest(RestMethod.POST.name(), params)
 		}
 
     def put = { params ->
-        return processRequest(Constants.PUT_METHOD, params)
+        return processRequest(RestMethod.PUT.name(), params)
     }
 
 
@@ -64,7 +60,7 @@ class RestclientMockService {
 		try{
 			fileName = mockedFileService.getFileName(uri, map)
 			ins = mockedFileService.getFileInputStream(fileName, method)
-			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING), method)
+			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING_UTF8), method)
 			log.debug "${method}: Returning JSON fileName: [${fileName}] for Request URI [${uri}]. Returning [${resp.responseCode}]."
 			if (resp.responseCode < 399){
 				resultClosure(params.success, resp)
@@ -78,7 +74,7 @@ class RestclientMockService {
 			log.error(errorMsg)
 			fileName = alternativeFile
 			ins = mockedFileService.getFileInputStream(fileName, method)
-			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING),method)
+			resp = JSONResponseProcessor.getResponse(JSON.parse(ins, Constants.ENCODING_UTF8),method)
 			if (resp.responseCode < 399){
 				resultClosure(params.success, resp)
 			}else{
@@ -86,9 +82,9 @@ class RestclientMockService {
 			}
 		}
 		catch(java.io.FileNotFoundException e1){
-			String errorMsg = "${method}: Request URI [${params.uri}], JSON Mock file [${fileName}] not found. Returning [${Constants.ERROR_STATUS}]."
+			String errorMsg = "${method}: Request URI [${params.uri}], JSON Mock file [${fileName}] not found. Returning [${HttpServletResponse.SC_NOT_FOUND}]."
 			log.error errorMsg
-			resp = [responseContent : "{\"error\":\"${errorMsg}\"}", responseCode: Constants.ERROR_STATUS]
+			resp = [responseContent : "{\"error\":\"${errorMsg}\"}", responseCode: HttpServletResponse.SC_NOT_FOUND]
 			}
 		finally {
 			if (ins) ins.close()
