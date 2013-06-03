@@ -11,3 +11,10 @@ target-eclipse
 web-app/WEB-INF/classes
 .project
 .classpath
+projectFilesBackup/server-mock-plugin.iml
+projectFilesBackup/server-mock-plugin.ipr
+projectFilesBackup/server-mock-plugin.iws
+server-mock-plugin-grailsPlugins.iml
+server-mock-plugin.iml
+server-mock-plugin.ipr
+server-mock-plugin.iws
