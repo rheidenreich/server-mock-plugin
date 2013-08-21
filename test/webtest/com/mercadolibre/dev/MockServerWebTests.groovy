@@ -69,6 +69,13 @@ class MockServerWebTests extends grails.util.WebTest {
 	   verifyText(text:'1234567')
 	   
 	   }
-   
+
+   void testExistingDelete(){
+	   //content:"application/json", contentFile:"/home/trygve/workspace/server-mock-plugin/test/webtest/test.json"
+	   
+	   invoke(method:"DELETE", url:"http://localhost:8080/server-mock-plugin/mocks/items?caller.id=41768430&client.id=1443")
+
+	   verifyText(text:'1443') 
+   }
 
 }
