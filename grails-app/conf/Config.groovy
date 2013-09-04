@@ -51,6 +51,8 @@ grails.spring.bean.packages = []
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
+grails.app.context = "/server-mock-plugin"
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
