@@ -192,7 +192,20 @@ class RestclientMockServiceTests extends GrailsUnitTestCase {
 			
 			}
 		
-		
-		
-	
+		void testItemDeleted() {
+			String uri = "/items?caller.id=41768430&client.id=1443"
+			def data
+			restclientMockService.delete(
+					uri: uri.toString(),
+					success: {
+						data = it
+					},
+					failure: {
+					}
+				)
+			
+			assertEquals(200, data.status)
+			assertEquals("deleted", data.data.status)
+		}
+
 }

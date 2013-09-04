@@ -36,6 +36,9 @@ class RestclientMockService {
         return processRequest(RestMethod.PUT.name(), params)
     }
 
+	def delete = { params ->
+		return processRequest(Constants.DELETE_METHOD, params)
+	}
 
     private def processRequest = {method,  params ->
 		
